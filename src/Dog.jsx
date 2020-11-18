@@ -28,6 +28,11 @@ class Dog extends React.Component {
     )
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.dogObj.message.includes('terrier')) return false;
+    return true;
+  }
+
   componentDidMount() {
     this.fetchDog();
   }
