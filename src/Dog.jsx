@@ -5,11 +5,12 @@ class Dog extends React.Component {
     super();
     this.fetchDog = this.fetchDog.bind(this);
     this.renderDogElement = this.renderDogElement.bind(this);
+    this.saveDog = this.saveDog.bind(this);
 
     this.state = {
       dogObj: undefined,
       loading: true,
-      array: [],
+      storedDogs: [],
     }
   }
 
@@ -25,19 +26,28 @@ class Dog extends React.Component {
     this.fetchDog();
   }
 
+  saveDog() {
+    this.setState(({ dogObj, storedDogs }) => ({
+      storedDogs: [...storedDogs, dogObj],
+    }))
+    this.fetchDog();
+  }
+
   renderDogElement() {
     return (
       <div>
         <img src={this.state.dogObj.message} />
+        <button type='button' onClick={this.saveDog}>Salvar Dog!</button>
       </div>
     )
   }
 
   render() {
-    const { dogObj } = this.state;
+    const { dogObj, storedDogs } = this.state;
     const loadingElement = <span>Loading...</span>
     return (
       <div>
+        {storedDogs.map(dog => (<img key={dog.message} src={dog.message}/>))}
         {dogObj ? this.renderDogElement() : loadingElement}
       </div>
     )
