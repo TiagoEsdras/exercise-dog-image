@@ -4,6 +4,7 @@ class Dog extends React.Component {
   constructor(){
     super();
     this.fetchDog = this.fetchDog.bind(this);
+    this.renderDogElement = this.renderDogElement.bind(this);
 
     this.state = {
       dogObj: undefined,
@@ -23,9 +24,23 @@ class Dog extends React.Component {
   componentDidMount() {
     this.fetchDog();
   }
-  
+
+  renderDogElement() {
+    return (
+      <div>
+        <img src={this.state.dogObj.message} />
+      </div>
+    )
+  }
+
   render() {
-    return <div />
+    const { dogObj } = this.state;
+    const loadingElement = <span>Loading...</span>
+    return (
+      <div>
+        {dogObj ? this.renderDogElement() : loadingElement}
+      </div>
+    )
   }
 }
 
