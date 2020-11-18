@@ -6,31 +6,31 @@ class Dog extends React.Component {
     //this.fetchDog = this.fetchDog.bind(this);
     this.renderDogElement = this.renderDogElement.bind(this);
     this.saveDog = this.saveDog.bind(this);
+    this.getDog = this.getDog.bind(this);
 
     this.state = {
-      dogObj: undefined,
+      dogObj: {},
       loading: true,
       storedDogs: [],
     }
   }
 
-  async fetchDog() {
-    this.setState(
-      {loading: true},
-      async () => {
-        const requestJson = await fetch('https://dog.ceo/api/breeds/image/random');
-        const requestObj = await requestJson.json();
-        this.setState({
-          loading: false,
-          dogObj: requestObj,
-        })
-      }
-    )
+
+  async getDog(){ 
+      const requestJson = await fetch('https://dog.ceo/api/breeds/image/random');
+      const requestObj = await requestJson.json();
+      this.setState({
+        loading: false,
+        dogObj: requestObj,
+      })
+  }
+
+   fetchDog() {
+     this.setState({loading: true, dogObj:{}},this.getDog)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.dogObj.message.includes('terrier')) return false;
-    return true;
+    return !nextState.dogObj.message?.includes('terrier')
   }
 
   componentDidMount() {
