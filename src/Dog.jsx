@@ -5,6 +5,7 @@ class Dog extends React.Component {
     super();
 
     this.renderDogElement = this.renderDogElement.bind(this);
+
     this.fetchDog = this.fetchDog.bind(this);
 
     this.state = {
