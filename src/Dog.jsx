@@ -20,15 +20,19 @@ class Dog extends React.Component {
     })
   }
 
-  shouldComponentUpdate(_nextProps, nextState) {
-    if (nextState.dogObj.message.includes('terrier')) return false;
-    return true;
+  shouldComponentUpdate(_nextProps, { dogObj }) {
+    return !dogObj.message.includes('terrier');
   }
 
   componentDidMount() {
     this.fetchDog();
   }
 
+  componentDidUpdate() {
+    const { message } = this.state.dogObj;
+    localStorage.setItem('dogUrl', message);
+    alert(message.split('/')[4])
+  }
   renderDogElement() {
     return (
       <div>
