@@ -3,32 +3,24 @@ import React from 'react';
 class Dog extends React.Component {
   constructor(){
     super();
-    //this.fetchDog = this.fetchDog.bind(this);
+
     this.renderDogElement = this.renderDogElement.bind(this);
-    this.saveDog = this.saveDog.bind(this);
+    this.fetchDog = this.fetchDog.bind(this);
 
     this.state = {
-      dogObj: undefined,
-      loading: true,
-      storedDogs: [],
+      dogObj: "",
     }
   }
 
   async fetchDog() {
-    this.setState(
-      {loading: true},
-      async () => {
-        const requestJson = await fetch('https://dog.ceo/api/breeds/image/random');
-        const requestObj = await requestJson.json();
-        this.setState({
-          loading: false,
-          dogObj: requestObj,
-        })
-      }
-    )
+    const requestJson = await fetch('https://dog.ceo/api/breeds/image/random');
+    const requestObj = await requestJson.json();
+    this.setState({
+      dogObj: requestObj,
+    })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(_nextProps, nextState) {
     if (nextState.dogObj.message.includes('terrier')) return false;
     return true;
   }
@@ -37,29 +29,26 @@ class Dog extends React.Component {
     this.fetchDog();
   }
 
-  saveDog() {
-    this.setState(({ dogObj, storedDogs }) => ({
-      storedDogs: [...storedDogs, dogObj],
-    }))
-    this.fetchDog();
-  }
-
   renderDogElement() {
     return (
       <div>
-        <img src={this.state.dogObj.message} alt="Dogs" />
-        <button type='button' onClick={this.saveDog}>Salvar Dog!</button>
+        <img src={this.state.dogObj.message} alt="Dogs" className="dogs"/>
       </div>
     )
   }
 
   render() {
-    const { loading, storedDogs } = this.state;
+    const { dogObj } = this.state;
     const loadingElement = <span>Loading...</span>
-    return (
+    if (!dogObj) return loadingElement;
+    else return (
       <div>
-        {storedDogs.map(dog => (<img key={dog.message} src={dog.message} alt="dogs"/>))}
-        {!loading ? this.renderDogElement() : loadingElement}
+        <div>
+          <button type='button' onClick={this.fetchDog}>Next Dog!</button>
+        </div>
+        <div>
+          {this.renderDogElement()}
+        </div>
       </div>
     )
   }
